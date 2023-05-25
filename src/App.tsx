@@ -1,9 +1,30 @@
 import React from 'react';
 import './App.scss';
+import usersFromServer from './api/users';
+import photosFromServer from './api/photos';
+import albumsFromServer from './api/albums';
 
-// import usersFromServer from './api/users';
-// import photosFromServer from './api/photos';
-// import albumsFromServer from './api/albums';
+function getAlbum(albumId: number) {
+  const foundAlbum = albumsFromServer.find(album => album.id === albumId);
+
+  return foundAlbum || null;
+}
+
+function getUser(userId: number | undefined) {
+  const foundUser = usersFromServer.find(user => user.id === userId);
+
+  return foundUser || null;
+}
+
+const photosWithAlbums = photosFromServer.map(photo => ({
+  ...photo,
+  album: getAlbum(photo.albumId),
+}));
+
+const photosWithUsers = photosWithAlbums.map(photo => ({
+  ...photo,
+  user: getUser(photo.album?.userId),
+}));
 
 export const App: React.FC = () => {
   return (
@@ -180,18 +201,32 @@ export const App: React.FC = () => {
             </thead>
 
             <tbody>
-              <tr>
-                <td className="has-text-weight-bold">
-                  1
-                </td>
+              {photosWithUsers.map(photo => (
+                <tr>
+                  <td
+                    className="has-text-weight-bold"
+                    key={photo.id}
+                  >
+                    {photo.id}
+                    <a href="#``">
+                      <span className="icon">
+                        <i data-cy="SortIcon" className="fas fa-sort" />
+                      </span>
+                    </a>
+                  </td>
 
-                <td>accusamus beatae ad facilis cum similique qui sunt</td>
-                <td>quidem molestiae enim</td>
+                  <td>{photo.title}</td>
+                  <td>{photo.album?.title}</td>
 
-                <td className="has-text-link">
-                  Max
-                </td>
-              </tr>
+                  <td
+                    className={photo.user?.sex === 'm'
+                      ? 'has-text-link'
+                      : 'has-text-danger'}
+                  >
+                    {photo.user?.name}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
