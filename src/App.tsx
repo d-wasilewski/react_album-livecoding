@@ -1,9 +1,27 @@
 import React from 'react';
 import './App.scss';
 
-// import usersFromServer from './api/users';
-// import photosFromServer from './api/photos';
-// import albumsFromServer from './api/albums';
+import usersFromServer from './api/users';
+import photosFromServer from './api/photos';
+import albumsFromServer from './api/albums';
+
+const albumPhoto = photosFromServer.map(photo => {
+  const album = albumsFromServer.find(curr => (
+    curr.id === photo.albumId
+  ));
+
+  const user = usersFromServer.find(curr => (
+    curr.id === album?.userId
+  ));
+
+  return (
+    {
+      ...photo,
+      album,
+      user,
+    }
+  );
+});
 
 export const App: React.FC = () => {
   return (
@@ -180,7 +198,23 @@ export const App: React.FC = () => {
             </thead>
 
             <tbody>
-              <tr>
+              {
+                albumPhoto.map(photo => (
+                  <tr key={photo.id}>
+                    <td className="has-text-weight-bold">
+                      {photo.id}
+                    </td>
+
+                    <td>{photo.title}</td>
+                    <td>{photo.album?.title}</td>
+
+                    <td className="has-text-link">
+                      {photo.user?.name}
+                    </td>
+                  </tr>
+                ))
+              }
+              {/* <tr>
                 <td className="has-text-weight-bold">
                   1
                 </td>
@@ -191,7 +225,7 @@ export const App: React.FC = () => {
                 <td className="has-text-link">
                   Max
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
