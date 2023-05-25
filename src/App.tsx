@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.scss';
 
-// import usersFromServer from './api/users';
-// import photosFromServer from './api/photos';
-// import albumsFromServer from './api/albums';
+import usersFromServer from './api/users';
+import photosFromServer from './api/photos';
+import albumsFromServer from './api/albums';
+
+import { PhotoList } from './components/list';
 
 export const App: React.FC = () => {
   return (
@@ -180,18 +182,11 @@ export const App: React.FC = () => {
             </thead>
 
             <tbody>
-              <tr>
-                <td className="has-text-weight-bold">
-                  1
-                </td>
-
-                <td>accusamus beatae ad facilis cum similique qui sunt</td>
-                <td>quidem molestiae enim</td>
-
-                <td className="has-text-link">
-                  Max
-                </td>
-              </tr>
+              <PhotoList
+                users={usersFromServer}
+                photos={photosFromServer}
+                albums={albumsFromServer}
+              />
             </tbody>
           </table>
         </div>
