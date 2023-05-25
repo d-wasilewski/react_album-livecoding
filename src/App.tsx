@@ -1,9 +1,20 @@
 import React from 'react';
 import './App.scss';
 
-// import usersFromServer from './api/users';
-// import photosFromServer from './api/photos';
-// import albumsFromServer from './api/albums';
+import usersFromServer from './api/users';
+import photosFromServer from './api/photos';
+import albumsFromServer from './api/albums';
+
+const newUser = usersFromServer.map(user => {
+  const photos = photosFromServer.find(photo => user.id === photo.albumId);
+  const userAlbum = albumsFromServer.find(users => user.id === users.id);
+
+  return {
+    ...user,
+    photo: photos,
+    user: userAlbum,
+  };
+});
 
 export const App: React.FC = () => {
   return (
@@ -180,18 +191,21 @@ export const App: React.FC = () => {
             </thead>
 
             <tbody>
-              <tr>
-                <td className="has-text-weight-bold">
-                  1
-                </td>
 
-                <td>accusamus beatae ad facilis cum similique qui sunt</td>
-                <td>quidem molestiae enim</td>
-
-                <td className="has-text-link">
-                  Max
-                </td>
-              </tr>
+              {newUser.map((user, index) => (
+                <tr key={user.id}>
+                  <td className="has-text-weight-bold">
+                    {index + 1}
+                  </td>
+                  <td>
+                    <img src={user.photo?.url} alt={`user ${index + 1}`} />
+                  </td>
+                  <td>{user.photo?.title}</td>
+                  <td className="has-text-link">
+                    {user.name}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
