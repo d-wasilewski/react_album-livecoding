@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-unused-prop-types */
 import React from 'react';
@@ -28,7 +29,7 @@ interface TypeProps {
 }
 
 export const PhotoList: React.FC<TypeProps> = (entries) => {
-  const { users, photos, albums } = entries;
+  const { /*users*/ photos /*albums*/ } = entries;
 
   return (
     <tbody>
